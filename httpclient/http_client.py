@@ -12,6 +12,8 @@ from time import gmtime, strftime
 # Chris Joakim, Microsoft, 2018/06/17
 # python http_client.py get_id 87ed3026-9539-4c49-863d-4e54e60a8316
 # python http_client.py get_id bc06f01f-3f86-49ee-86f0-1f3f8639ee2d 
+# python http_client.py get_id eddd56b5-3b4c-4b50-9d56-b53b4c7b50c6 
+# python http_client.py delete_id test eddd56b5-3b4c-4b50-9d56-b53b4c7b50c6
 # python http_client.py post_airport 
 
 headers = {'Content-Type':'application/json'}
@@ -41,6 +43,15 @@ if __name__ == "__main__":
             url = "{}".format(target_url())
             print("url: {}".format(url))
             r = requests.post(url, headers=headers, data=json.dumps(airport))
+            print(r)
+            print(r.text)
+
+        elif func == 'delete_id':
+            pk = sys.argv[2]
+            id = sys.argv[3]
+            url = "{}{}/{}".format(target_url(), pk, id)
+            print(url)
+            r = requests.delete(url, headers=headers)
             print(r)
             print(r.text)
 

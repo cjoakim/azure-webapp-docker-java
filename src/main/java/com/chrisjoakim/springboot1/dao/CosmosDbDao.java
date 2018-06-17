@@ -1,22 +1,11 @@
 package com.chrisjoakim.springboot1.dao;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.chrisjoakim.springboot1.AppConfig;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.azure.documentdb.ConnectionPolicy;
 import com.microsoft.azure.documentdb.ConsistencyLevel;
 import com.microsoft.azure.documentdb.Document;
@@ -24,7 +13,9 @@ import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.documentdb.DocumentClientException;
 import com.microsoft.azure.documentdb.FeedOptions;
 import com.microsoft.azure.documentdb.FeedResponse;
+import com.microsoft.azure.documentdb.PartitionKey;
 import com.microsoft.azure.documentdb.RequestOptions;
+import com.microsoft.azure.documentdb.ResourceResponse;
 
 /**
  * This class performs all CRUD operations vs CosmosDB for the application.
@@ -69,6 +60,14 @@ public class CosmosDbDao {
         return this.client.upsertDocument(collLink, obj, new RequestOptions(), false).getResource();
     }
 
+    public ResourceResponse<Document> deleteDocument(String dbName, String collName, String pk, String docId) throws DocumentClientException {
+
+        String docLink = this.docLink(dbName, collName, docId);
+        RequestOptions options = new RequestOptions();
+        options.setPartitionKey(new PartitionKey(pk));
+        return this.client.deleteDocument(docLink, options);
+    }
+    
     public FeedResponse<Document> queryAsDocuments(String dbName, String collName, String sql) {
 
         String collLink = this.collLink(dbName, collName);
@@ -112,6 +111,12 @@ public class CosmosDbDao {
         return "dbs/" + d + "/colls/" + c;
     }
 
+    protected String docLink(String dbName, String collName, String docId) {
+
+        String clink = this.collLink(dbName, collName);
+        return clink + "/docs/" + docId;
+    }
+    
     protected String serviceEndpoint() {
 
         return "https://" + AppConfig.getDocDbAcct() + ".documents.azure.com";

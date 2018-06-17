@@ -22,6 +22,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.azure.documentdb.Document;
 import com.microsoft.azure.documentdb.DocumentClientException;
+import com.microsoft.azure.documentdb.ResourceResponse;
 
 /**
  * 
@@ -75,10 +76,7 @@ public class Application extends Object {
     
     // curl -v http://localhost:8080/cosmosdb/zipcodes/87ed3026-9539-4c49-863d-4e54e60a8316
     
-    @RequestMapping(
-    	value="/cosmosdb/zipcodes/{objectId}",
-    	method=RequestMethod.GET,
-    	produces="application/json")  
+    @RequestMapping(value="/cosmosdb/zipcodes/{objectId}", method=RequestMethod.GET, produces="application/json")  
     public ResponseEntity<?> zipcodeGet(@PathVariable("objectId") String id) {
     	
     	String sql = String.format("select * from c where c.id = \"%s\"", id);
@@ -94,10 +92,7 @@ public class Application extends Object {
     	}
     }
     
-    @RequestMapping(
-    	value="/cosmosdb/zipcodes/",
-    	method=RequestMethod.POST,
-    	headers="Accept=application/json")
+    @RequestMapping(value="/cosmosdb/zipcodes/", method=RequestMethod.POST, headers="Accept=application/json")
     public ResponseEntity<?> zipcodeCreate(@RequestBody Map<String, Object> body) {
     	
     	try {
@@ -118,27 +113,26 @@ public class Application extends Object {
 		}
     }
     
-    @RequestMapping(
-    	value="/cosmosdb/zipcodes/{objectId}",
-    	method=RequestMethod.PUT,
-    	headers="Accept=application/json",
-    	produces="application/json")
+    @RequestMapping(value="/cosmosdb/zipcodes/{objectId}", method=RequestMethod.PUT, headers="Accept=application/json", produces="application/json")
     public String zipcodeUpdate(@PathVariable("objectId") String id) {
         return "PUT " + System.currentTimeMillis();
     }
     
-    @RequestMapping(
-    	value="/cosmosdb/zipcodes/{objectId}",
-    	method=RequestMethod.DELETE)
-    public String zipcodeDelete(@PathVariable("objectId") String id) {
-        return "" + System.currentTimeMillis();
+    @RequestMapping(value="/cosmosdb/zipcodes/{pk}/{objectId}", method=RequestMethod.DELETE)
+    public ResponseEntity<?> zipcodeDelete(@PathVariable("pk") String pk, @PathVariable("objectId") String id) {
+
+    	try {
+			logger.warn(String.format("zipcodeDelete; pk: %s id: %s", pk, id));
+			ResourceResponse<Document> resp = cosmosDbDao.deleteDocument(dbName, collName, pk, id);
+			logger.warn(resp.toString());
+			return new ResponseEntity<String>("{}", HttpStatus.OK); 
+		}
+    	catch (DocumentClientException e) {
+    		return new ResponseEntity<String>("{}", HttpStatus.NOT_FOUND); 
+		}
     }
    
-    @RequestMapping(
-    	value="/cosmosdb/zipcodes/find/",
-    	method=RequestMethod.GET,
-    	headers="Accept=application/json",
-    	produces="application/json")
+    @RequestMapping(value="/cosmosdb/zipcodes/find/", method=RequestMethod.GET, headers="Accept=application/json", produces="application/json")
     public String zipcodesFind() {
         return "" + System.currentTimeMillis();
     }
