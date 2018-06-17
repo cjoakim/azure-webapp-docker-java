@@ -98,14 +98,11 @@ public class Application extends Object {
     	value="/cosmosdb/zipcodes/",
     	method=RequestMethod.POST,
     	headers="Accept=application/json")
-    public ResponseEntity<?> zipcodeCreate(@RequestBody Object jsonObj) {
+    public ResponseEntity<?> zipcodeCreate(@RequestBody Map<String, Object> body) {
     	
     	try {
-        	logger.warn("zipcodeCreate; jsonObj: " + jsonObj);
-//    		Map<String, Object> obj = parseJsonBody(jsonStr);
-//        	logger.warn("zipcodeCreate; obj: " + obj);
-        	
-			Document doc = cosmosDbDao.insertDocument(dbName, collName, jsonObj);
+        	logger.warn("zipcodeCreate; body: " + body);
+			Document doc = cosmosDbDao.insertDocument(dbName, collName, body);
         	logger.warn("zipcodeCreate; doc: " + doc);
         	
 			if (doc != null) {

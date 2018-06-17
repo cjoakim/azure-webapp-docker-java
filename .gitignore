@@ -6,6 +6,12 @@
 .project
 .settings/
 
+# Python httpclient
+httpclient/bin/
+httpclient/lib/
+httpclient/pip-selfcheck.json
+httpclient/pyvenv.cfg
+
 doc/
 target/
 tmp/
