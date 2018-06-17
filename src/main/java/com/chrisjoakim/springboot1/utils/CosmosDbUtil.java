@@ -19,7 +19,7 @@ import com.chrisjoakim.springboot1.dao.CosmosDbDao;
 import com.chrisjoakim.utils.CommandLineArgs;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.mail.util.MailLogger;
+import com.microsoft.azure.documentdb.Document;
 
 // com.chrisjoakim.springboot1.utils.CosmosDbUtil
 
@@ -86,7 +86,8 @@ public class CosmosDbUtil {
 					}
 					else {
 						logger.warn("loading: " + airport);
-						//Document doc = dao.insertDocument(String dbName, String collName, Object obj) 
+						Document doc = dao.insertDocument(dbName, collName, airport);
+						logger.warn("loaded: " + doc);
 					}
 				}
 	        }

@@ -16,8 +16,6 @@ outfile="tmp/load_airports.txt"
 
 echo 'Invoking function '$function
 
-java -classpath $CP com.chrisjoakim.springboot1.utils.CosmosDbUtil --function $function --infile $infile --use-db $usedb --dbname $dbname --collname $collname --pause $pause 
-
-# &> $outfile
+java -classpath $CP com.chrisjoakim.springboot1.utils.CosmosDbUtil --function $function --infile $infile --use-db $usedb --dbname $dbname --collname $collname --pause $pause &> $outfile
 
 echo 'done'
