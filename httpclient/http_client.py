@@ -17,6 +17,7 @@ from time import gmtime, strftime
 # python http_client.py delete_id test 2dcf43ae-94c4-42f8-8f43-ae94c482f88c
 # python http_client.py post_airport 
 # python http_client.py update_airport 
+# python http_client.py query 
 
 headers = {'Content-Type':'application/json'}
 
@@ -75,6 +76,15 @@ if __name__ == "__main__":
             r = requests.delete(url, headers=headers)
             print(r)
             print(r.text)
+
+        elif func == 'query':
+            query = dict()
+            query['sql'] = 'SELECT * FROM c where c.pk = "BDL"'
+            url = "{}query/".format(target_url(), id)
+            print("url: {}".format(url))
+            r = requests.post(url, headers=headers, data=json.dumps(query))
+            array = json.loads(r.text)
+            print(array)
 
         else:
             print("undefined function: {}".format(func))

@@ -51,11 +51,7 @@ public class AppConfig implements EnvVarNames {
 
     public static synchronized String storageConnectionString() {
 
-        String acctName = System.getenv(AZURE_STORAGE_ACCOUNT);
-        String acctKey  = System.getenv(AZURE_STORAGE_KEY);
-        
         String s = System.getenv(AZURE_STORAGE_CONNECTION_STRING);
-        // return String.format("DefaultEndpointsProtocol=https;AccountName=%s;AccountKey=%s", acctName, acctKey);
         return s;
     }
 

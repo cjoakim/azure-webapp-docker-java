@@ -22,6 +22,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.azure.documentdb.Document;
 import com.microsoft.azure.documentdb.DocumentClientException;
+import com.microsoft.azure.documentdb.FeedResponse;
 import com.microsoft.azure.documentdb.ResourceResponse;
 
 /**
@@ -142,9 +143,22 @@ public class Application extends Object {
 		}
     }
    
-    @RequestMapping(value="/cosmosdb/zipcodes/find/", method=RequestMethod.GET, headers="Accept=application/json", produces="application/json")
-    public String zipcodesFind() {
-        return "" + System.currentTimeMillis();
+    @RequestMapping(value="/cosmosdb/zipcodes/query/", method=RequestMethod.POST, headers="Accept=application/json", produces="application/json")
+    public ResponseEntity<?> zipcodesQuery(@RequestBody Map<String, String> body) {
+
+    	try {
+			logger.warn(String.format("zipcodesFind; body: %s", body));
+			String sql = body.get("sql");
+			logger.warn(String.format("zipcodesFind; sql: %s", sql));
+			ArrayList<String> docs = cosmosDbDao.queryAsJsonList(dbName, collName, sql);
+
+			ObjectMapper mapper = new ObjectMapper();
+			String json = mapper.writeValueAsString(docs);
+			return new ResponseEntity<String>(json, HttpStatus.OK); 
+		}
+    	catch (Exception e) {
+    		return new ResponseEntity<String>("{}", HttpStatus.NOT_FOUND); 
+		}
     }
     
 //    Path                             Method  Functionality       HTTP Status Codes
@@ -153,7 +167,7 @@ public class Application extends Object {
 //    /cosmosdb/zipcodes/<objectId>    PUT     Updating Objects    200 (OK), 204 (No Content), 404 (Not Found)
 //    /cosmosdb/zipcodes/<objectId>    GET     Query document      200 (OK), 404 (Not Found)
 //    /cosmosdb/zipcodes/<objectId>    DELETE  Deleting Objects    200 (OK), 404 (Not Found)
-//    /cosmosdb/zipcodes/find/<query>  GET     Query documents     200 (OK), 404 (Not Found)
+//    /cosmosdb/zipcodes/query/        POST    Query documents     200 (OK), 404 (Not Found)
     
 	protected Map<String, Object> parseJsonBody(String json) throws Exception {
 		
