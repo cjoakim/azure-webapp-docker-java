@@ -114,8 +114,18 @@ public class Application extends Object {
     }
     
     @RequestMapping(value="/cosmosdb/zipcodes/{objectId}", method=RequestMethod.PUT, headers="Accept=application/json", produces="application/json")
-    public String zipcodeUpdate(@PathVariable("objectId") String id) {
-        return "PUT " + System.currentTimeMillis();
+    public ResponseEntity<?> zipcodeUpdate(@RequestBody Map<String, Object> body) {
+
+    	try {
+        	logger.warn("zipcodeUpdate; body: " + body);
+			Document doc = cosmosDbDao.upsertDocument(dbName, collName, body);
+        	logger.warn("zipcodeUpdate; doc: " + doc);
+			return new ResponseEntity<String>(doc.toJson(), HttpStatus.OK); 
+		}
+    	catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("{}", HttpStatus.INTERNAL_SERVER_ERROR); 
+		}
     }
     
     @RequestMapping(value="/cosmosdb/zipcodes/{pk}/{objectId}", method=RequestMethod.DELETE)

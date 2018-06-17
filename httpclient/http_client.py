@@ -14,18 +14,26 @@ from time import gmtime, strftime
 # python http_client.py get_id bc06f01f-3f86-49ee-86f0-1f3f8639ee2d 
 # python http_client.py get_id eddd56b5-3b4c-4b50-9d56-b53b4c7b50c6 
 # python http_client.py delete_id test eddd56b5-3b4c-4b50-9d56-b53b4c7b50c6
+# python http_client.py delete_id test 2dcf43ae-94c4-42f8-8f43-ae94c482f88c
 # python http_client.py post_airport 
+# python http_client.py update_airport 
 
 headers = {'Content-Type':'application/json'}
 
 def target_url():
     return 'http://localhost:8080/cosmosdb/zipcodes/'
 
+def new_airport():
+    airport = dict()
+    airport['pk'] = 'test'
+    airport['time'] = str(time.time())
+    return airport
 
 if __name__ == "__main__":
 
     if len(sys.argv) > 1:
         func  = sys.argv[1].lower()
+        print(func)
 
         if func == 'get_id':
             id = sys.argv[2]
@@ -36,15 +44,28 @@ if __name__ == "__main__":
             print(r.text)
 
         elif func == 'post_airport':
-            print(func)
-            airport = dict()
-            airport['pk'] = 'test'
-            airport['time'] = str(time.time())
+            airport = new_airport()
             url = "{}".format(target_url())
             print("url: {}".format(url))
             r = requests.post(url, headers=headers, data=json.dumps(airport))
             print(r)
             print(r.text)
+
+        elif func == 'update_airport':
+            url1 = "{}".format(target_url())
+            print(url1)
+            a1   = new_airport()
+            r1   = requests.post(url1, headers=headers, data=json.dumps(a1))
+            doc1 = json.loads(r1.text)
+            print(doc1)
+            doc1['xxx'] = str(time.time())
+            id = doc1['id']
+
+            url2 = "{}{}".format(target_url(), id)
+            print(url2)
+            r2   = requests.put(url2, headers=headers, data=json.dumps(doc1))
+            doc2 = json.loads(r2.text)
+            print(doc2)
 
         elif func == 'delete_id':
             pk = sys.argv[2]
