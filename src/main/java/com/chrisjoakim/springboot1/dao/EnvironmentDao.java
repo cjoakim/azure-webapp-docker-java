@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import com.chrisjoakim.springboot1.EnvVarNames;
 
-public class EnvironmentDao extends Object {
+
+public class EnvironmentDao extends Object implements EnvVarNames {
 
 	public EnvironmentDao() {
 
@@ -45,18 +47,19 @@ public class EnvironmentDao extends Object {
 	public ArrayList<String> azureEnvVars() {
 		
 		ArrayList<String> list = new ArrayList<String>();
-		list.add("AZURE_COSMOSDB_DOCDB_ACCT");
-		list.add("AZURE_COSMOSDB_DOCDB_DBNAME");
-		list.add("AZURE_COSMOSDB_DOCDB_KEY");
-		list.add("AZURE_COSMOSDB_DOCDB_URI");
+		list.add(AZURE_COSMOSDB_DOCDB_ACCT);
+		list.add(AZURE_COSMOSDB_DOCDB_DBNAME);
+		list.add(AZURE_COSMOSDB_DOCDB_KEY);
+		list.add(AZURE_COSMOSDB_DOCDB_URI);
 		return list;
 	}
 	
 	public ArrayList<String> otherEnvVars() {
 		
 		ArrayList<String> list = new ArrayList<String>();
-		list.add("JAVA_HOME");
-		list.add("xxx");
+		list.add(JAVA_HOME);
+		list.add(PATH);
+		list.add(USER);
 		return list;
 	}
 }

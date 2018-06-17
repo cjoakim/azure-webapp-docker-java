@@ -24,11 +24,18 @@ import com.chrisjoakim.springboot1.dao.EnvironmentDao;
 public class Application extends Object {
 	
 	// Instance variables:
-	CosmosDbDao cosmosDao = new CosmosDbDao();
+	CosmosDbDao cosmosDao = null;
 	
 	Application() {
 		
 		super();
+		
+		try {
+			this.cosmosDao = new CosmosDbDao();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// Endpoints for general web app functions
