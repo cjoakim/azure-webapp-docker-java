@@ -1,6 +1,10 @@
 package com.chrisjoakim.springboot1;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.chrisjoakim.springboot1.dao.CosmosDbDao;
 import com.chrisjoakim.springboot1.dao.EnvironmentDao;
+import com.microsoft.azure.documentdb.Document;
+import com.microsoft.azure.documentdb.FeedResponse;
 
 /**
  * 
@@ -23,15 +29,21 @@ import com.chrisjoakim.springboot1.dao.EnvironmentDao;
 @RestController
 public class Application extends Object {
 	
+    // Class variables
+    private static final Logger logger = LoggerFactory.getLogger(Application.class);
+    		
 	// Instance variables:
-	CosmosDbDao cosmosDao = null;
+	private String dbName = AppConfig.getDocDbDefaultDbName();
+	private String collName = AppConfig.getDocDbDefaultCollName();
+	private CosmosDbDao cosmosDbDao = null;
+	
 	
 	Application() {
 		
 		super();
 		
 		try {
-			this.cosmosDao = new CosmosDbDao();
+			this.cosmosDbDao = new CosmosDbDao();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -55,15 +67,28 @@ public class Application extends Object {
     	return new EnvironmentDao().getEnvironmentVariables();
     }
 
-    // Endpoints for Azure CosmosDB Zipcode collection CRUD functions
+    // Endpoints for Azure CosmosDB Zipcode collection CRUD functions.
     // See http://www.baeldung.com/spring-requestmapping
+    
+    // curl -v http://localhost:8080/cosmosdb/zipcodes/87ed3026-9539-4c49-863d-4e54e60a8316
     
     @RequestMapping(
     	value="/cosmosdb/zipcodes/{objectId}",
     	method=RequestMethod.GET,
     	produces="application/json")  
-    public String zipcodeGet(@PathVariable("objectId") String id) {
-        return "" + System.currentTimeMillis();
+    public ResponseEntity<?> zipcodeGet(@PathVariable("objectId") String id) {
+    	
+    	String sql = String.format("select * from c where c.id = \"%s\"", id);
+    	logger.warn("zipcodeGet; sql: " + sql);
+    	
+    	ArrayList<String> docs = cosmosDbDao.queryAsJsonList(dbName,collName, sql);
+    	
+    	if (docs.size() > 0) {
+    		return new ResponseEntity<String>(docs.get(0), HttpStatus.OK); 
+    	}
+    	else {
+    		return new ResponseEntity<String>("{}", HttpStatus.NOT_FOUND); 
+    	}
     }
     
     @RequestMapping(
