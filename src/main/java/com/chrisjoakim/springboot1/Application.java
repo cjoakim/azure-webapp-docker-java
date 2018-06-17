@@ -2,23 +2,26 @@ package com.chrisjoakim.springboot1;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chrisjoakim.springboot1.dao.CosmosDbDao;
 import com.chrisjoakim.springboot1.dao.EnvironmentDao;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.azure.documentdb.Document;
-import com.microsoft.azure.documentdb.FeedResponse;
+import com.microsoft.azure.documentdb.DocumentClientException;
 
 /**
  * 
@@ -81,7 +84,7 @@ public class Application extends Object {
     	String sql = String.format("select * from c where c.id = \"%s\"", id);
     	logger.warn("zipcodeGet; sql: " + sql);
     	
-    	ArrayList<String> docs = cosmosDbDao.queryAsJsonList(dbName,collName, sql);
+    	ArrayList<String> docs = cosmosDbDao.queryAsJsonList(dbName, collName, sql);
     	
     	if (docs.size() > 0) {
     		return new ResponseEntity<String>(docs.get(0), HttpStatus.OK); 
@@ -95,8 +98,27 @@ public class Application extends Object {
     	value="/cosmosdb/zipcodes/",
     	method=RequestMethod.POST,
     	headers="Accept=application/json")
-    public String zipcodeCreate() {
-        return "" + System.currentTimeMillis();
+    public ResponseEntity<?> zipcodeCreate(@RequestBody Object jsonObj) {
+    	
+    	try {
+        	logger.warn("zipcodeCreate; jsonObj: " + jsonObj);
+//    		Map<String, Object> obj = parseJsonBody(jsonStr);
+//        	logger.warn("zipcodeCreate; obj: " + obj);
+        	
+			Document doc = cosmosDbDao.insertDocument(dbName, collName, jsonObj);
+        	logger.warn("zipcodeCreate; doc: " + doc);
+        	
+			if (doc != null) {
+				return new ResponseEntity<String>(doc.toJson(), HttpStatus.CREATED); 
+			}
+			else {
+				return new ResponseEntity<String>("{}", HttpStatus.NOT_FOUND); 
+			}
+		}
+    	catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("{}", HttpStatus.INTERNAL_SERVER_ERROR); 
+		}
     }
     
     @RequestMapping(
@@ -105,7 +127,7 @@ public class Application extends Object {
     	headers="Accept=application/json",
     	produces="application/json")
     public String zipcodeUpdate(@PathVariable("objectId") String id) {
-        return "" + System.currentTimeMillis();
+        return "PUT " + System.currentTimeMillis();
     }
     
     @RequestMapping(
@@ -132,6 +154,14 @@ public class Application extends Object {
 //    /cosmosdb/zipcodes/<objectId>    DELETE  Deleting Objects    200 (OK), 404 (Not Found)
 //    /cosmosdb/zipcodes/find/<query>  GET     Query documents     200 (OK), 404 (Not Found)
     
+	protected Map<String, Object> parseJsonBody(String json) throws Exception {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		TypeReference<HashMap<String, Object>> typeRef 
+			= new TypeReference<HashMap<String, Object>>() {};
+		return mapper.readValue(json, typeRef);
+	}
+	
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
