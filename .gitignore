@@ -1,3 +1,6 @@
+# Docker environment variables file:
+docker-env.txt
+
 # Compiled class file
 *.class
 

@@ -2,7 +2,7 @@
     
     <description>
         Ant script to create a backup zip file of this project.
-        Chris Joakim, 2018/06/16
+        Chris Joakim, 2018/06/18
         $ ant -f backup.xml
     </description>
 
