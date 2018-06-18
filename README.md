@@ -14,12 +14,12 @@ Path                            Method  Functionality       HTTP Status Codes
 /                               GET     Hello from Spring   200 (OK)
 /time                           GET     Server date & time  200 (OK)
 /env/{secret}                   GET     Server env vars     200 (OK)
-cosmosdb/zipcodes/<objectId>    GET     Retrieving Objects  200 (OK), 404 (Not Found)
-cosmosdb/zipcodes/              POST    Creating Objects    201 (Created), 404 (Not Found), 409 (Conflict) if resource already exists.
-cosmosdb/zipcodes/<objectId>    PUT     Updating Objects    200 (OK), 204 (No Content), 404 (Not Found)
-cosmosdb/zipcodes/<objectId>    GET     Query document      200 (OK), 404 (Not Found)
-cosmosdb/zipcodes/<objectId>    DELETE  Deleting Objects    200 (OK), 404 (Not Found)
-cosmosdb/zipcodes/query/        POST    Query documents     200 (OK), 404 (Not Found), expects JSON with 'sql' key
+cosmosdb/airports/<objectId>    GET     Retrieving Objects  200 (OK), 404 (Not Found)
+cosmosdb/airports/              POST    Creating Objects    201 (Created), 404 (Not Found), 409 (Conflict) if resource already exists.
+cosmosdb/airports/<objectId>    PUT     Updating Objects    200 (OK), 204 (No Content), 404 (Not Found)
+cosmosdb/airports/<objectId>    GET     Query document      200 (OK), 404 (Not Found)
+cosmosdb/airports/<objectId>    DELETE  Deleting Objects    200 (OK), 404 (Not Found)
+cosmosdb/airports/query/        POST    Query documents     200 (OK), 404 (Not Found), expects JSON with 'sql' key
 ```
 
 See https://gist.github.com/odan/1d2ef018adb3ea5a0d3abb35406d2c65
@@ -140,8 +140,9 @@ webapp-docker-java
 
 $ az acr update --name cjoakimacr --admin-enabled true
 
-az container create --resource-group cjoakim-containers --name webapp-docker-java --image cjoakimacr.azurecr.io/webapp-docker-java:v2 --cpu 1 --memory 1 --registry-username cjoakimacr --registry-password $AZURE_CONTAINER_REGISTRY_USER_PASS --dns-name-label webapp-docker-java --ports 8080
+az container create --resource-group cjoakim-containers --name webapp-docker-java --image cjoakimacr.azurecr.io/webapp-docker-java:v2 --cpu 1 --memory 1 --registry-username cjoakimacr --registry-password $AZURE_CONTAINER_REGISTRY_USER_PASS --dns-name-label webapp-docker-java --ports 8080 -e 'AZURE_COSMOSDB_DOCDB_ACCT=cjoakimcosmosddb' 'AZURE_COSMOSDB_DOCDB_KEY=TBGre.....XXA==' 'AZURE_COSMOSDB_DOCDB_URI=https://cjoakimcosmosddb.documents.azure.com:443/'
 
+curl -v http://webapp-docker-java.eastus.azurecontainer.io:8080/cosmosdb/airports/0cf7eb67-13d6-4e63-b232-04dd64ff6677
 ```
 
 

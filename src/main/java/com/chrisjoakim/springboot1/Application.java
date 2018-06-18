@@ -85,14 +85,14 @@ public class Application extends Object {
     // See http://www.baeldung.com/spring-requestmapping
     //
     // Path                            Method  Functionality       HTTP Status Codes
-    // cosmosdb/zipcodes/<objectId>    GET     Retrieving Objects  200 (OK), 404 (Not Found)
-    // cosmosdb/zipcodes/              POST    Creating Objects    201 (Created), 404 (Not Found), 409 (Conflict) if resource already exists.
-    // cosmosdb/zipcodes/<objectId>    PUT     Updating Objects    200 (OK), 204 (No Content), 404 (Not Found)
-    // cosmosdb/zipcodes/<objectId>    GET     Query document      200 (OK), 404 (Not Found)
-    // cosmosdb/zipcodes/<objectId>    DELETE  Deleting Objects    200 (OK), 404 (Not Found)
-    // cosmosdb/zipcodes/query/        POST    Query documents     200 (OK), 404 (Not Found), expects JSON with 'sql' key
+    // cosmosdb/airports/<objectId>    GET     Retrieving Objects  200 (OK), 404 (Not Found)
+    // cosmosdb/airports/              POST    Creating Objects    201 (Created), 404 (Not Found), 409 (Conflict) if resource already exists.
+    // cosmosdb/airports/<objectId>    PUT     Updating Objects    200 (OK), 204 (No Content), 404 (Not Found)
+    // cosmosdb/airports/<objectId>    GET     Query document      200 (OK), 404 (Not Found)
+    // cosmosdb/airports/<objectId>    DELETE  Deleting Objects    200 (OK), 404 (Not Found)
+    // cosmosdb/airports/query/        POST    Query documents     200 (OK), 404 (Not Found), expects JSON with 'sql' key
     
-    @RequestMapping(value="/cosmosdb/zipcodes/{objectId}", method=RequestMethod.GET, produces="application/json")  
+    @RequestMapping(value="/cosmosdb/airports/{objectId}", method=RequestMethod.GET, produces="application/json")  
     public ResponseEntity<?> zipcodeGet(@PathVariable("objectId") String id) {
     	
     	String sql = String.format("select * from c where c.id = \"%s\"", id);
@@ -108,7 +108,7 @@ public class Application extends Object {
     	}
     }
     
-    @RequestMapping(value="/cosmosdb/zipcodes/", method=RequestMethod.POST, headers="Accept=application/json")
+    @RequestMapping(value="/cosmosdb/airports/", method=RequestMethod.POST, headers="Accept=application/json")
     public ResponseEntity<?> zipcodeCreate(@RequestBody Map<String, Object> body) {
     	
     	try {
@@ -131,7 +131,7 @@ public class Application extends Object {
 		}
     }
     
-    @RequestMapping(value="/cosmosdb/zipcodes/{objectId}", method=RequestMethod.PUT, headers="Accept=application/json", produces="application/json")
+    @RequestMapping(value="/cosmosdb/airports/{objectId}", method=RequestMethod.PUT, headers="Accept=application/json", produces="application/json")
     public ResponseEntity<?> zipcodeUpdate(@RequestBody Map<String, Object> body) {
 
     	try {
@@ -146,7 +146,7 @@ public class Application extends Object {
 		}
     }
     
-    @RequestMapping(value="/cosmosdb/zipcodes/{pk}/{objectId}", method=RequestMethod.DELETE)
+    @RequestMapping(value="/cosmosdb/airports/{pk}/{objectId}", method=RequestMethod.DELETE)
     public ResponseEntity<?> zipcodeDelete(@PathVariable("pk") String pk, @PathVariable("objectId") String id) {
 
     	try {
@@ -160,7 +160,7 @@ public class Application extends Object {
 		}
     }
    
-    @RequestMapping(value="/cosmosdb/zipcodes/query/", method=RequestMethod.POST, headers="Accept=application/json", produces="application/json")
+    @RequestMapping(value="/cosmosdb/airports/query/", method=RequestMethod.POST, headers="Accept=application/json", produces="application/json")
     public ResponseEntity<?> zipcodesQuery(@RequestBody Map<String, String> body) {
 
     	try {
