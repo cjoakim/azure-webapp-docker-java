@@ -60,6 +60,17 @@ AZURE_COSMOSDB_DOCDB_URI=https://cjoakimcosmosddb.documents.azure.com:443/
 ./build_jar.sh
 ```
 
+### Load your CosmosDB
+
+In your CosmosDB in Azure Portal, create a database named **dev** with collection named **airports**.
+The collection should have a partition key named **/pk**, and an initial RU value of 10000.
+
+```
+./load_airports.sh
+
+tmp/load_airports.txt | grep loaded
+```
+
 ### Execute the Web App on your Workstation
 
 ```
