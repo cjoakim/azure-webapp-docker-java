@@ -129,13 +129,19 @@ $ az acr login --name cjoakimacr
 $ az acr repository list --name cjoakimacr --output table
 
 $ docker tag cjoakim/webapp-docker-java:latest cjoakimacr.azurecr.io/webapp-docker-java:v1
+$ docker tag cjoakim/webapp-docker-java:latest cjoakimacr.azurecr.io/webapp-docker-java:v2
 
-$ docker push cjoakimacr.azurecr.io/webapp-docker-java:v1
+$ docker push cjoakimacr.azurecr.io/webapp-docker-java:v2
 
 $ az acr repository list --name cjoakimacr --output table
 Result
 ------------------
 webapp-docker-java
+
+$ az acr update --name cjoakimacr --admin-enabled true
+
+az container create --resource-group cjoakim-containers --name webapp-docker-java --image cjoakimacr.azurecr.io/webapp-docker-java:v2 --cpu 1 --memory 1 --registry-username cjoakimacr --registry-password $AZURE_CONTAINER_REGISTRY_USER_PASS --dns-name-label webapp-docker-java --ports 8080
+
 ```
 
 
