@@ -5,7 +5,7 @@
 # Chris Joakim, 2018/06/18
 
 CP=.:target/classes
-CP=$CP:target/spring-boot-docker1-0.1.0.jar
+CP=$CP:app.jar
 CP=$CP:/Users/cjoakim/.m2/repository/org/springframework/boot/spring-boot-starter-web/2.0.3.RELEASE/spring-boot-starter-web-2.0.3.RELEASE.jar
 CP=$CP:/Users/cjoakim/.m2/repository/org/springframework/boot/spring-boot-starter/2.0.3.RELEASE/spring-boot-starter-2.0.3.RELEASE.jar
 CP=$CP:/Users/cjoakim/.m2/repository/org/springframework/boot/spring-boot/2.0.3.RELEASE/spring-boot-2.0.3.RELEASE.jar

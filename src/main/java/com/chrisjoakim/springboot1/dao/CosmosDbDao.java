@@ -109,10 +109,10 @@ public class CosmosDbDao {
         String c = collName;
 
         if (d == null) {
-            d = AppConfig.getDocDbDefaultDbName();
+            d = AppConfig.getDocDbDatabaseName();
         }
         if (c == null) {
-            c = AppConfig.getDocDbDefaultCollName();
+            c = AppConfig.getDocDbCollName();
         }
         return "dbs/" + d + "/colls/" + c;
     }

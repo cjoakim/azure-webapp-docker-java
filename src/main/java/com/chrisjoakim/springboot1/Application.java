@@ -40,8 +40,8 @@ public class Application extends Object {
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
     		
 	// Instance variables:
-	private String dbName = AppConfig.getDocDbDefaultDbName();
-	private String collName = AppConfig.getDocDbDefaultCollName();
+	private String dbName = AppConfig.getDocDbDatabaseName();
+	private String collName = AppConfig.getDocDbCollName();
 	private CosmosDbDao cosmosDbDao = null;
 	
 	Application() {

@@ -117,3 +117,25 @@ $ python http_client.py post_airport
 $ python http_client.py update_airport 
 $ python http_client.py query 
 ```
+
+
+## Azure Container Registry
+
+See https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-azure-cli
+
+```
+$ az acr login --name cjoakimacr
+
+$ az acr repository list --name cjoakimacr --output table
+
+$ docker tag cjoakim/webapp-docker-java:latest cjoakimacr.azurecr.io/webapp-docker-java:v1
+
+$ docker push cjoakimacr.azurecr.io/webapp-docker-java:v1
+
+$ az acr repository list --name cjoakimacr --output table
+Result
+------------------
+webapp-docker-java
+```
+
+

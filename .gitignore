@@ -1,8 +1,9 @@
 # Docker environment variables file:
 docker-env.txt
 
-# Compiled class file
+# Compiled class and jar files
 *.class
+app.jar
 
 # Eclipse IDE files
 .classpath

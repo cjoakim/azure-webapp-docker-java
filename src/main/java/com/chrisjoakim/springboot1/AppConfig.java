@@ -13,7 +13,11 @@ import java.util.Map;
  */
 
 public class AppConfig implements EnvVarNames {
-
+	
+	// Constants:
+	public static String DEFAULT_COSMOSDB_DOCDB_DBNAME   = "dev";
+	public static String DEFAULT_COSMOSDB_DOCDB_COLLNAME = "airports";
+	
     public static synchronized Map<String, String> envVars() {
 
         return System.getenv();
@@ -23,7 +27,19 @@ public class AppConfig implements EnvVarNames {
 
         return envVars().get(name);
     }
+    
+    public static synchronized String envVar(String name, String defaultValue) {
 
+        String value = envVars().get(name);
+        
+        if (value != null) {
+        	return value;
+        }
+        else {
+        	return defaultValue;
+        }
+    }
+    
     public static String getDocDbAcct() {
 
         return System.getenv(AZURE_COSMOSDB_DOCDB_ACCT);
@@ -39,14 +55,14 @@ public class AppConfig implements EnvVarNames {
         return System.getenv(AZURE_COSMOSDB_DOCDB_URI);
     }
     
-    public static String getDocDbDefaultDbName() {
+    public static String getDocDbDatabaseName() {
 
-        return System.getenv(AZURE_COSMOSDB_DOCDB_DBNAME);
+        return envVar(AZURE_COSMOSDB_DOCDB_DBNAME, DEFAULT_COSMOSDB_DOCDB_DBNAME);
     }
 
-    public static String getDocDbDefaultCollName() {
+    public static String getDocDbCollName() {
 
-        return System.getenv(AZURE_COSMOSDB_DOCDB_COLLNAME);
+        return envVar(AZURE_COSMOSDB_DOCDB_COLLNAME, DEFAULT_COSMOSDB_DOCDB_COLLNAME);
     }
 
     public static synchronized String storageConnectionString() {
@@ -58,6 +74,15 @@ public class AppConfig implements EnvVarNames {
     public static String getWebappSecret() {
 
         return System.getenv(AZURE_WEBAPP_SECRET);
+    }
+    
+    public static void main(String[] args) {
+    	
+    	// This method is for ad-hoc testing purposed only
+    	
+    	System.out.println(AppConfig.getWebappSecret());
+    	System.out.println(AppConfig.getDocDbDatabaseName());
+    	System.out.println(AppConfig.getDocDbCollName());
     }
     
 }

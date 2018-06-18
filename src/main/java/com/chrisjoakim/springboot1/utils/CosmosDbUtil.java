@@ -43,8 +43,8 @@ public class CosmosDbUtil {
         logger.warn("main; function: " + function);
         
         String  infile   = clArgs.stringArg("--infile",  "data/public/world_airports_flat.json");
-        String  dbName   = clArgs.stringArg("--dbname",   AppConfig.getDocDbDefaultDbName());
-        String  collName = clArgs.stringArg("--collname", AppConfig.getDocDbDefaultCollName());
+        String  dbName   = clArgs.stringArg("--dbname",   AppConfig.getDocDbDatabaseName());
+        String  collName = clArgs.stringArg("--collname", AppConfig.getDocDbCollName());
         long    pauseMs  = clArgs.longArg("--pauseMs", 10);
         
         switch(function) {

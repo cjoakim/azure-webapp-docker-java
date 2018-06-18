@@ -1,13 +1,11 @@
 FROM openjdk:8-jdk-alpine
 MAINTAINER Chris Joakim
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+RUN mkdir -p /app
 
-VOLUME /tmp
+WORKDIR /app
 
-# Simply copy the "uberjar" into the image
-COPY target/spring-boot-docker1-0.1.0.jar /usr/src/app/app.jar
+COPY app.jar /app/app.jar
 
 # The Spring Boot Web App will listen on port 8080.
 EXPOSE 8080
