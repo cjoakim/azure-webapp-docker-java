@@ -6,12 +6,18 @@ WORKDIR /usr/src/app
 
 VOLUME /tmp
 
+# Simply copy the "uberjar" into the image
 COPY target/spring-boot-docker1-0.1.0.jar /usr/src/app/app.jar
 
+# The Spring Boot Web App will listen on port 8080.
 EXPOSE 8080
+
+# This is the entry-point command for the container instances.
 CMD [ "java", "-jar", "app.jar" ]
 
-# Docker commands:
+
+
+# Example Docker commands:
 # docker build -t cjoakim/webapp-docker-java . 
 # docker run -d -p 3000:3000 cjoakim/webapp-docker-java:latest
 # docker run -d -p 80:3000 cjoakim/webapp-docker-java:latest

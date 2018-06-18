@@ -2,5 +2,6 @@
 .project
 .settings/
 doc/
+target/
 tmp/
 
