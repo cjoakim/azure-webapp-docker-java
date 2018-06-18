@@ -9,7 +9,7 @@ import java.util.Vector;
  * The intent of this class is to eliminate copy-and-paste tokenizing logic.
  *
  * @author Chris Joakim, Microsoft
- * @date   2018/06/17
+ * @date   2018/06/18
  */
 
 public class Tokenizer extends Object {
@@ -51,4 +51,3 @@ public class Tokenizer extends Object {
 		return list;
 	}
 }
-

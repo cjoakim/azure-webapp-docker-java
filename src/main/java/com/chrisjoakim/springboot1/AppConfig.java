@@ -3,13 +3,13 @@ package com.chrisjoakim.springboot1;
 import java.util.Map;
 
 /**
- * This class returns configuration values specified as environment variables.
+ * This class returns application configuration values, typically specified as environment variables.
  *
  * See https://12factor.net
  * See https://12factor.net/config
  *
  * @author Chris Joakim, Microsoft
- * @date   2018/06/17
+ * @date   2018/06/18
  */
 
 public class AppConfig implements EnvVarNames {
@@ -54,6 +54,4 @@ public class AppConfig implements EnvVarNames {
         String s = System.getenv(AZURE_STORAGE_CONNECTION_STRING);
         return s;
     }
-
-
 }

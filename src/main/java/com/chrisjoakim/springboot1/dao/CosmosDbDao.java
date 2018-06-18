@@ -19,14 +19,21 @@ import com.microsoft.azure.documentdb.ResourceResponse;
 
 /**
  * This class performs all CRUD operations vs CosmosDB for the application.
- * TODO - revisit this class
+ * It uses the Java Sync SDK for SQL API of Azure Cosmos DB;
+ * @see https://github.com/Azure/azure-documentdb-java
+ * 
+ * Related links:
+ * @see https://docs.microsoft.com/en-us/azure/cosmos-db/sql-api-java-application
+ * @see https://docs.microsoft.com/en-us/azure/cosmos-db/sql-api-sql-query
+ * @see https://github.com/Azure/azure-documentdb-java/blob/master/documentdb-examples/src/test/java/com/microsoft/azure/documentdb/examples/DocumentQuerySamples.java
  *
- * See https://docs.microsoft.com/en-us/azure/cosmos-db/sql-api-java-application
- * See https://docs.microsoft.com/en-us/azure/cosmos-db/sql-api-sql-query
- * See https://github.com/Azure/azure-documentdb-java/blob/master/documentdb-examples/src/test/java/com/microsoft/azure/documentdb/examples/DocumentQuerySamples.java
+ * There is also a newer Async SDK for CosmosDB, based on RxJava, see the following links for this SDK:
+ * @see https://github.com/ReactiveX/RxJava
+ * @see https://azure.microsoft.com/en-us/blog/announcing-new-async-java-sdk-for-azure-cosmosdb/
+ * @see https://github.com/Azure/azure-cosmosdb-java
  *
  * @author Chris Joakim, Microsoft
- * @date   2018/05/14
+ * @date   2018/06/18
  */
 
 public class CosmosDbDao {
@@ -36,7 +43,6 @@ public class CosmosDbDao {
 
     // Instance variables:
     private DocumentClient client = null;
-
 
     public CosmosDbDao() throws Exception {
 
@@ -121,6 +127,4 @@ public class CosmosDbDao {
 
         return "https://" + AppConfig.getDocDbAcct() + ".documents.azure.com";
     }
-
-    
 }

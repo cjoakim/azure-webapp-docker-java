@@ -4,7 +4,7 @@ package com.chrisjoakim.springboot1;
  * This interface defines the environment variable names used in this project.
  *
  * @author Chris Joakim, Microsoft
- * @date   2018/06/17
+ * @date   2018/06/18
  */
 
 public interface EnvVarNames {

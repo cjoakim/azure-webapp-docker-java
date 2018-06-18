@@ -1,19 +1,15 @@
 package com.chrisjoakim.springboot1.utils;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.chrisjoakim.io.FileUtil;
 import com.chrisjoakim.springboot1.AppConfig;
 import com.chrisjoakim.springboot1.dao.CosmosDbDao;
 import com.chrisjoakim.utils.CommandLineArgs;
@@ -21,54 +17,52 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.azure.documentdb.Document;
 
-// com.chrisjoakim.springboot1.utils.CosmosDbUtil
+/**
+ * This class is used to perform batch/bulk/ad-hoc CosmosDB operations.
+ * See 'load_airports.sh' where this program is executed.
+ * 
+ * @author Chris Joakim, Microsoft
+ * @date   2018/06/18
+ */
 
 public class CosmosDbUtil {
 
-    // Class variables
+    // Class variables:
     private static final Logger logger = LoggerFactory.getLogger(CosmosDbUtil.class);
-
+	private static CosmosDbDao dao = null;
     
 	public CosmosDbUtil() {
-		// TODO Auto-generated constructor stub
+		
+		super();
 	}
 
 	public static void main(String[] args) {
 
 		CommandLineArgs clArgs = new CommandLineArgs(args);
         String function = clArgs.stringArg("--function", "none");
-        logger.warn("Main.main; function: " + function);
+        logger.warn("main; function: " + function);
         
         String  infile   = clArgs.stringArg("--infile",  "data/public/world_airports_flat.json");
-        boolean useDb    = clArgs.booleanArg("--use-db",  false);
         String  dbName   = clArgs.stringArg("--dbname",   AppConfig.getDocDbDefaultDbName());
         String  collName = clArgs.stringArg("--collname", AppConfig.getDocDbDefaultCollName());
-        long    pauseMs  = clArgs.longArg("--pause", 50);
+        long    pauseMs  = clArgs.longArg("--pauseMs", 10);
         
         switch(function) {
-        case "load_airports":
-        	loadAirports(infile, dbName, collName, pauseMs, useDb);
-        	break;
+	        case "load_airports":
+	        	loadAirports(infile, dbName, collName, pauseMs);
+	        	break;
+	        default:
+	            logger.warn("main; unknown function: " + function);
+	            break;
         }
-
     }
 
-    private static void loadAirports(String infile, String dbName, String collName, long pauseMs, boolean useDb) {
-    
-    	CosmosDbDao dao = null;
-    	
-		try {
-			dao = new CosmosDbDao();
-		}
-		catch (Exception e1) {
-			e1.printStackTrace();
-			return;
-		}
+    private static void loadAirports(String infile, String dbName, String collName, long pauseMs) {
     	
     	try {
+    		createDao();
         	HashMap<String, Object> iataCodes = new HashMap<String, Object>();
-
-			List<String> airports = readFileLines(infile);
+			List<String> airports = new FileUtil().readFileLines(infile);
 			
 	        for (int i = 0; i < airports.size(); i++) {
 	        	String line = airports.get(i);
@@ -88,11 +82,10 @@ public class CosmosDbUtil {
 						logger.warn("loading: " + airport);
 						Document doc = dao.insertDocument(dbName, collName, airport);
 						logger.warn("loaded: " + doc);
+						pause(pauseMs);
 					}
 				}
 	        }
-	        
-	        
 		}
     	catch (Exception e) {
 			e.printStackTrace();
@@ -103,21 +96,21 @@ public class CosmosDbUtil {
     		logger.warn("dao closed");
 		}
     }
-    
-
-	private static List<String> readFileLines(String filename) throws Exception {
-		
-		List<String> lines = new ArrayList<String>();
-		
-		try (Stream<String> stream = Files.lines(Paths.get(filename))) {
-			stream.forEach(lines::add);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return lines;
-	}
 	
+    private static void createDao() {
+    	
+    	if (dao != null) {
+    		try {
+    			dao = new CosmosDbDao();
+    		}
+    		catch (Exception e) {
+    			e.printStackTrace();
+    			logger.error("EXCEPTION WHEN CREATING CosmosDbDao INSTANCE, PROGRAM TERMINATING.");
+    			System.exit(1);
+    		}
+    	}
+    }
+    
 	private static Map<String, Object> parseJsonLineToMap(String line) throws Exception {
 		
 		ObjectMapper mapper = new ObjectMapper();
@@ -125,5 +118,14 @@ public class CosmosDbUtil {
 			= new TypeReference<HashMap<String, Object>>() {};
 		return mapper.readValue(line, typeRef);
 	}
-	
+
+    private static void pause(long ms) {
+
+        try {
+            Thread.sleep(ms);
+        }
+        catch (InterruptedException e) {
+            // ignore
+        }
+    }
 }

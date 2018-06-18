@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
  * their values to various datatypes (String, int, long, boolean).
  *
  * @author Chris Joakim, Microsoft
- * @date   2018/05/14
+ * @date   2018/06/18
  */
 
 public class CommandLineArgs {
@@ -98,5 +98,4 @@ public class CommandLineArgs {
 		}
 		return defaultValue;		
 	}	
-
 }

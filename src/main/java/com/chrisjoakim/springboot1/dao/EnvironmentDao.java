@@ -6,6 +6,15 @@ import java.util.HashMap;
 
 import com.chrisjoakim.springboot1.EnvVarNames;
 
+/**
+ * Simple DAO class used by the web layer to obtain configuration values.
+ *
+ * See https://12factor.net
+ * See https://12factor.net/config
+ *
+ * @author Chris Joakim, Microsoft
+ * @date   2018/06/18
+ */
 
 public class EnvironmentDao extends Object implements EnvVarNames {
 
