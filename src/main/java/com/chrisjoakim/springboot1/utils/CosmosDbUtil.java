@@ -29,7 +29,7 @@ public class CosmosDbUtil {
 
     // Class variables:
     private static final Logger logger = LoggerFactory.getLogger(CosmosDbUtil.class);
-	private static CosmosDbDao dao = null;
+	private static CosmosDbDao dao = createDao();
     
 	public CosmosDbUtil() {
 		
@@ -60,7 +60,7 @@ public class CosmosDbUtil {
     private static void loadAirports(String infile, String dbName, String collName, long pauseMs) {
     	
     	try {
-    		createDao();
+    		pause(1000);
         	HashMap<String, Object> iataCodes = new HashMap<String, Object>();
 			List<String> airports = new FileUtil().readFileLines(infile);
 			
@@ -97,18 +97,17 @@ public class CosmosDbUtil {
 		}
     }
 	
-    private static void createDao() {
+    private static CosmosDbDao createDao() {
     	
-    	if (dao != null) {
-    		try {
-    			dao = new CosmosDbDao();
-    		}
-    		catch (Exception e) {
-    			e.printStackTrace();
-    			logger.error("EXCEPTION WHEN CREATING CosmosDbDao INSTANCE, PROGRAM TERMINATING.");
-    			System.exit(1);
-    		}
-    	}
+		try {
+			return new CosmosDbDao();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			logger.error("EXCEPTION WHEN CREATING CosmosDbDao INSTANCE, PROGRAM TERMINATING.");
+			System.exit(1);
+		}
+    	return null;
     }
     
 	private static Map<String, Object> parseJsonLineToMap(String line) throws Exception {
