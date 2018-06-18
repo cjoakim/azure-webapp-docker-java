@@ -140,9 +140,12 @@ webapp-docker-java
 
 $ az acr update --name cjoakimacr --admin-enabled true
 
-az container create --resource-group cjoakim-containers --name webapp-docker-java --image cjoakimacr.azurecr.io/webapp-docker-java:v2 --cpu 1 --memory 1 --registry-username cjoakimacr --registry-password $AZURE_CONTAINER_REGISTRY_USER_PASS --dns-name-label webapp-docker-java --ports 8080 -e 'AZURE_COSMOSDB_DOCDB_ACCT=cjoakimcosmosddb' 'AZURE_COSMOSDB_DOCDB_KEY=TBGre.....XXA==' 'AZURE_COSMOSDB_DOCDB_URI=https://cjoakimcosmosddb.documents.azure.com:443/'
+az container create --resource-group cjoakim-containers --name webapp-docker-java-v3 --image cjoakimacr.azurecr.io/webapp-docker-java:v3 --cpu 1 --memory 1 --registry-username cjoakimacr --registry-password $AZURE_CONTAINER_REGISTRY_USER_PASS --dns-name-label webapp-docker-java --ports 8080 -e 'AZURE_COSMOSDB_DOCDB_ACCT=cjoakimcosmosddb' 'AZURE_COSMOSDB_DOCDB_KEY=TBGre......qXXA==' 'AZURE_COSMOSDB_DOCDB_URI=https://cjoakimcosmosddb.documents.azure.com:443/'
 
 curl -v http://webapp-docker-java.eastus.azurecontainer.io:8080/cosmosdb/airports/0cf7eb67-13d6-4e63-b232-04dd64ff6677
+
+{"country":"Canada","altitude":"108","iata_code":"YAY","_rid":"wboEAJ06JgAHAAAAAAAAAA==","city":"St. Anthony","timezone_num":"-3.5","latitude":"51.391944","epoch":"1529336500223","_attachments":"attachments/","timezone_code":"America/St_Johns","name":"St Anthony","location":{"coordinates":[-56.083056,51.391944],"type":"Point"},"pk":"YAY","id":"0cf7eb67-13d6-4e63-b232-04dd64ff6677","_self":"dbs/wboEAA==/colls/wboEAJ06JgA=/docs/wboEAJ06JgAHAAAAAAAAAA==/","_etag":"\"99009efb-0000-0000-0000-5b27d2b40000\"","longitude":"-56.083056","_ts":1529336500}
+
 ```
 
 
