@@ -68,7 +68,7 @@ The collection should have a partition key named **/pk**, and an initial RU valu
 ```
 ./load_airports.sh
 
-tmp/load_airports.txt | grep loaded
+cat tmp/load_airports.txt | grep loaded
 ```
 
 ### Execute the Web App on your Workstation
