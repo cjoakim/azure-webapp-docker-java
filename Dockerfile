@@ -20,4 +20,6 @@ CMD [ "java", "-jar", "app.jar" ]
 # docker stop -t 2 86b125ed43e5  (where 86b125ed43e5 is the CONTAINER ID from 'docker ps')
 # docker push cjoakim/webapp-docker-java:latest
 
-#ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","spring-boot-docker1-0.1.0.jar"]
+# Environment variables in the running container from the 'openjdk:8-jdk-alpine' base image:
+# JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk
+# PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/jvm/java-1.8-openjdk/jre/bin:/usr/lib/jvm/java-1.8-openjdk/bin

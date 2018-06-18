@@ -6,7 +6,7 @@
 echo 'docker ps list before starting app:'
 docker ps
 
-docker run --env-file ./docker-env.txt -d -p 3000:8080 cjoakim/webapp-docker-java:latest
+docker run --env-file ./docker-env.txt -d -p 8080:8080 cjoakim/webapp-docker-java:latest
 
 echo 'docker ps list after starting app:'
 docker ps

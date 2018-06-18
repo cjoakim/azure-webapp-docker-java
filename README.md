@@ -40,6 +40,7 @@ This repository assumes the following:
 - java 8 installed
 - maven 3.x installed
 - docker installed
+- python 3 optional, for http_client
 - environment variables are set per the following section
 
 ### Environment Variables
@@ -57,7 +58,7 @@ AZURE_COSMOSDB_DOCDB_URI=https://cjoakimcosmosddb.documents.azure.com:443/
 ### Compile and Build the Deployable JAR file
 
 ```
-./build_jar.sh
+$ ./build_jar.sh
 ```
 
 ### Load your CosmosDB
@@ -66,29 +67,53 @@ In your CosmosDB in Azure Portal, create a database named **dev** with collectio
 The collection should have a partition key named **/pk**, and an initial RU value of 10000.
 
 ```
-./load_airports.sh
+$ ./load_airports.sh
 
-cat tmp/load_airports.txt | grep loaded
+$ cat tmp/load_airports.txt | grep loaded
 ```
 
 ### Execute the Web App on your Workstation
 
 ```
-./execute_jar.sh
+$ ./execute_jar.sh
 ```
 
 ### Create the Docker Image
 
 Be sure to change the name 'cjoakim/webapp-docker-java' in this script to your own name.
 ```
-./build_image.sh
+$ ./build_image.sh
 ```
 
 ### Execute the Docker Image on your Workstation
 
-Be sure to change the name 'cjoakim/webapp-docker-java' in this script to your own name.
+First, create your **docker-env.txt** file:
 ```
-./execute_image.sh
+$ cp docker-env-example.txt docker-env.txt
+
+<edit docker-env.txt to add your own values>
 ```
 
+```
+$ ./execute_image.sh
+```
 
+### HTTP Client Program
+
+This repo contains a simple Python 3 HTTP client for the Java Spring Boot app.
+
+```
+$ cd http_client
+$ ./venv.sh                 (create the python virtual env)
+$ source bin/activate       (activate the python virtual env) 
+
+$ python http_client.py time
+$ python http_client.py env
+$ python http_client.py get_id 87ed3026-9539-4c49-863d-4e54e60a8316
+$ python http_client.py get_id bc06f01f-3f86-49ee-86f0-1f3f8639ee2d 
+$ python http_client.py get_id eddd56b5-3b4c-4b50-9d56-b53b4c7b50c6 
+$ python http_client.py delete_id test eddd56b5-3b4c-4b50-9d56-b53b4c7b50c6
+$ python http_client.py post_airport 
+$ python http_client.py update_airport 
+$ python http_client.py query 
+```
