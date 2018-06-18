@@ -1,6 +1,9 @@
 .classpath
+.git/
 .project
 .settings/
+docker-env-example.txt
+docker-env.txt
 doc/
 target/
 tmp/
