@@ -3,7 +3,7 @@
 # This script calculates the maven CLASSPATH and produces the
 # 'classpath' file, which can be sourced from a bash shell script.
 #
-# Chris Joakim, Microsoft, 2018/06/17
+# Chris Joakim, Microsoft, 2018/06/18
 
 mvn dependency:tree > doc/mvn_dependency_tree.txt
 

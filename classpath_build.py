@@ -5,14 +5,14 @@
 # $ python3 classpath.py classpath > classpath
 # $ python3 classpath.py jar_contents > list_jar_contents.sh
 #
-# Chris Joakim, 2018/06/17
+# Chris Joakim, 2018/06/18
 
 import sys
 
 classpath_txt = 'doc/classpath.txt'
 jar_file      = 'target/spring-boot-docker1-0.1.0.jar'
 classes_dir   = 'target/classes'
-asof_date     = '2018/06/17'
+asof_date     = '2018/06/18'
 
 if __name__ == "__main__":
 

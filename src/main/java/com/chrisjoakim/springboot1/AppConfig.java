@@ -54,4 +54,10 @@ public class AppConfig implements EnvVarNames {
         String s = System.getenv(AZURE_STORAGE_CONNECTION_STRING);
         return s;
     }
+    
+    public static String getWebappSecret() {
+
+        return System.getenv(AZURE_WEBAPP_SECRET);
+    }
+    
 }

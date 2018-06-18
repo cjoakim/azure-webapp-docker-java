@@ -70,9 +70,15 @@ public class Application extends Object {
     	return new EnvironmentDao().getTimeInfo();
     }
     
-    @RequestMapping(value="/env", method=RequestMethod.GET, produces="application/json")
-    public HashMap<String, String> environmentVariables() {
-    	return new EnvironmentDao().getEnvironmentVariables();
+    @RequestMapping(value="/env/{secret}", method=RequestMethod.GET, produces="application/json")
+    public HashMap<String, String> environmentVariables(@PathVariable("secret") String secret) {
+    	
+    	if (secret.equals(AppConfig.getWebappSecret())) {
+        	return new EnvironmentDao().getEnvironmentVariables();
+    	}
+    	else {
+        	return new EnvironmentDao().getHelloInfo();
+    	}
     }
 
     // Endpoints for Azure CosmosDB Zipcode collection CRUD functions:

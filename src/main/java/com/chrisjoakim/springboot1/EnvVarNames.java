@@ -26,6 +26,8 @@ public interface EnvVarNames {
     public static final String AZURE_STORAGE_CONNECTION_STRING          = "AZURE_STORAGE_CONNECTION_STRING";
     public static final String AZURE_STORAGE_KEY                        = "AZURE_STORAGE_KEY";
 
+    public static final String AZURE_WEBAPP_SECRET                      = "AZURE_WEBAPP_SECRET";
+    
     public static final String JAVA_HOME                                = "JAVA_HOME";
     public static final String PATH                                     = "PATH";
     public static final String USER                                     = "USER";
