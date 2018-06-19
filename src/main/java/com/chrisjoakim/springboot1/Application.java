@@ -29,7 +29,7 @@ import com.microsoft.azure.documentdb.ResourceResponse;
  * All HTTP endpoints for this App are currently defined in this class.
  * 
  * @author Chris Joakim, Microsoft
- * @date   2018/06/18
+ * @date   2018/06/19
  */
 
 @SpringBootApplication
@@ -54,7 +54,7 @@ public class Application extends Object {
 		catch (Exception e) {
 			e.printStackTrace();
 			logger.error("EXCEPTION WHEN CREATING CosmosDbDao INSTANCE, PROGRAM TERMINATING.");
-			System.exit(1);
+			//System.exit(1);
 		}
 	}
 
@@ -86,6 +86,7 @@ public class Application extends Object {
     //
     // Path                            Method  Functionality       HTTP Status Codes
     // cosmosdb/airports/<objectId>    GET     Retrieving Objects  200 (OK), 404 (Not Found)
+    // cosmosdb/airports/pk/<pk>       GET     Retrieving Objects  200 (OK), 404 (Not Found)
     // cosmosdb/airports/              POST    Creating Objects    201 (Created), 404 (Not Found), 409 (Conflict) if resource already exists.
     // cosmosdb/airports/<objectId>    PUT     Updating Objects    200 (OK), 204 (No Content), 404 (Not Found)
     // cosmosdb/airports/<objectId>    GET     Query document      200 (OK), 404 (Not Found)
@@ -93,10 +94,26 @@ public class Application extends Object {
     // cosmosdb/airports/query/        POST    Query documents     200 (OK), 404 (Not Found), expects JSON with 'sql' key
     
     @RequestMapping(value="/cosmosdb/airports/{objectId}", method=RequestMethod.GET, produces="application/json")  
-    public ResponseEntity<?> zipcodeGet(@PathVariable("objectId") String id) {
+    public ResponseEntity<?> airportGet(@PathVariable("objectId") String id) {
     	
     	String sql = String.format("select * from c where c.id = \"%s\"", id);
-    	logger.warn("zipcodeGet; sql: " + sql);
+    	logger.warn("airportGet; sql: " + sql);
+    	
+    	ArrayList<String> docs = cosmosDbDao.queryAsJsonList(dbName, collName, sql);
+    	
+    	if (docs.size() > 0) {
+    		return new ResponseEntity<String>(docs.get(0), HttpStatus.OK); 
+    	}
+    	else {
+    		return new ResponseEntity<String>("{}", HttpStatus.NOT_FOUND); 
+    	}
+    }
+    
+    @RequestMapping(value="/cosmosdb/airports/pk/{pk}", method=RequestMethod.GET, produces="application/json")  
+    public ResponseEntity<?> airportGetByIataCode(@PathVariable("pk") String pk) {
+    	
+    	String sql = String.format("select * from c where c.pk = \"%s\"", pk.toUpperCase());
+    	logger.warn("airportGet; sql: " + sql);
     	
     	ArrayList<String> docs = cosmosDbDao.queryAsJsonList(dbName, collName, sql);
     	
@@ -109,12 +126,12 @@ public class Application extends Object {
     }
     
     @RequestMapping(value="/cosmosdb/airports/", method=RequestMethod.POST, headers="Accept=application/json")
-    public ResponseEntity<?> zipcodeCreate(@RequestBody Map<String, Object> body) {
+    public ResponseEntity<?> airportCreate(@RequestBody Map<String, Object> body) {
     	
     	try {
-        	logger.warn("zipcodeCreate; body: " + body);
+        	logger.warn("airportCreate; body: " + body);
 			Document doc = cosmosDbDao.insertDocument(dbName, collName, body);
-        	logger.warn("zipcodeCreate; doc: " + doc);
+        	logger.warn("airportCreate; doc: " + doc);
         	
         	// TODO - consider adding duplicate detection logic and return 409 (Conflict)
         	
@@ -132,12 +149,12 @@ public class Application extends Object {
     }
     
     @RequestMapping(value="/cosmosdb/airports/{objectId}", method=RequestMethod.PUT, headers="Accept=application/json", produces="application/json")
-    public ResponseEntity<?> zipcodeUpdate(@RequestBody Map<String, Object> body) {
+    public ResponseEntity<?> airportUpdate(@RequestBody Map<String, Object> body) {
 
     	try {
-        	logger.warn("zipcodeUpdate; body: " + body);
+        	logger.warn("airportUpdate; body: " + body);
 			Document doc = cosmosDbDao.upsertDocument(dbName, collName, body);
-        	logger.warn("zipcodeUpdate; doc: " + doc);
+        	logger.warn("airportUpdate; doc: " + doc);
 			return new ResponseEntity<String>(doc.toJson(), HttpStatus.OK); 
 		}
     	catch (Exception e) {
@@ -147,10 +164,10 @@ public class Application extends Object {
     }
     
     @RequestMapping(value="/cosmosdb/airports/{pk}/{objectId}", method=RequestMethod.DELETE)
-    public ResponseEntity<?> zipcodeDelete(@PathVariable("pk") String pk, @PathVariable("objectId") String id) {
+    public ResponseEntity<?> airportDelete(@PathVariable("pk") String pk, @PathVariable("objectId") String id) {
 
     	try {
-			logger.warn(String.format("zipcodeDelete; pk: %s id: %s", pk, id));
+			logger.warn(String.format("airportDelete; pk: %s id: %s", pk, id));
 			ResourceResponse<Document> resp = cosmosDbDao.deleteDocument(dbName, collName, pk, id);
 			logger.warn(resp.toString());
 			return new ResponseEntity<String>("{}", HttpStatus.OK); 
@@ -161,12 +178,12 @@ public class Application extends Object {
     }
    
     @RequestMapping(value="/cosmosdb/airports/query/", method=RequestMethod.POST, headers="Accept=application/json", produces="application/json")
-    public ResponseEntity<?> zipcodesQuery(@RequestBody Map<String, String> body) {
+    public ResponseEntity<?> airportsQuery(@RequestBody Map<String, String> body) {
 
     	try {
-			logger.warn(String.format("zipcodesFind; body: %s", body));
+			logger.warn(String.format("airportsFind; body: %s", body));
 			String sql = body.get("sql");
-			logger.warn(String.format("zipcodesFind; sql: %s", sql));
+			logger.warn(String.format("airportsFind; sql: %s", sql));
 			ArrayList<String> docs = cosmosDbDao.queryAsJsonList(dbName, collName, sql);
 
 			ObjectMapper mapper = new ObjectMapper();

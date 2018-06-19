@@ -130,6 +130,7 @@ $ az acr repository list --name cjoakimacr --output table
 
 $ docker tag cjoakim/webapp-docker-java:latest cjoakimacr.azurecr.io/webapp-docker-java:v1
 $ docker tag cjoakim/webapp-docker-java:latest cjoakimacr.azurecr.io/webapp-docker-java:v2
+$ docker tag cjoakim/webapp-docker-java:latest cjoakimacr.azurecr.io/webapp-docker-java:latest
 
 $ docker push cjoakimacr.azurecr.io/webapp-docker-java:v2
 

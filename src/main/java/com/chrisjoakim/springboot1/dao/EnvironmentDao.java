@@ -13,7 +13,7 @@ import com.chrisjoakim.springboot1.EnvVarNames;
  * See https://12factor.net/config
  *
  * @author Chris Joakim, Microsoft
- * @date   2018/06/18
+ * @date   2018/06/19
  */
 
 public class EnvironmentDao extends Object implements EnvVarNames {
@@ -25,7 +25,7 @@ public class EnvironmentDao extends Object implements EnvVarNames {
 	
 	public HashMap<String, String> getHelloInfo() {
 		HashMap<String, String> hash = new HashMap<String, String>();
-		hash.put("message", "hello from Spring Boot web app");	
+		hash.put("message", "hello from Spring Boot web app, version 6/19 5:46pm");	
 		return hash;
 	}
 	

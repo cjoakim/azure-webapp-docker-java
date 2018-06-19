@@ -24,6 +24,12 @@ CMD [ "java", "-jar", "app.jar" ]
 # docker stop -t 2 86b125ed43e5  (where 86b125ed43e5 is the CONTAINER ID from 'docker ps')
 # docker push cjoakim/webapp-docker-java:latest
 
+# az acr login --name cjoakimacr
+# az acr repository list --name cjoakimacr --output table
+# docker tag cjoakim/webapp-docker-java:latest cjoakimacr.azurecr.io/webapp-docker-java:latest
+# docker push cjoakimacr.azurecr.io/webapp-docker-java:latest
+
 # Environment variables in the running container from the 'openjdk:8-jdk-alpine' base image:
 # JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk
 # PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/jvm/java-1.8-openjdk/jre/bin:/usr/lib/jvm/java-1.8-openjdk/bin
+
