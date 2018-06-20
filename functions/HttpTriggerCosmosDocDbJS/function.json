@@ -1,0 +1,26 @@
+{
+  "bindings": [
+    {
+      "authLevel": "function",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "type": "documentDB",
+      "name": "outputDocument",
+      "databaseName": "dev",
+      "collectionName": "test",
+      "createIfNotExists": false,
+      "partitionKey": "/pk",
+      "connection": "cjoakimcosmosddb_DOCUMENTDB",
+      "direction": "out"
+    }
+  ],
+  "disabled": false
+}

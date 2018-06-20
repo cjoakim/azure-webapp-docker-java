@@ -1,0 +1,24 @@
+{
+  "bindings": [
+    {
+      "type": "cosmosDBTrigger",
+      "name": "documents",
+      "direction": "in",
+      "leaseCollectionName": "leases",
+      "connectionStringSetting": "cjoakimcosmosmongo_DOCUMENTDB",
+      "databaseName": "dev",
+      "collectionName": "test",
+      "createLeaseCollectionIfNotExists": true
+    },
+    {
+      "type": "documentDB",
+      "name": "outputDocument",
+      "databaseName": "dev",
+      "collectionName": "events",
+      "createIfNotExists": false,
+      "connection": "cjoakimcosmosmongo_DOCUMENTDB",
+      "direction": "out"
+    }
+  ],
+  "disabled": false
+}
