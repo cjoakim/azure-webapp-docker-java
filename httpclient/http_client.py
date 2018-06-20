@@ -117,6 +117,7 @@ if __name__ == "__main__":
             doc['pk'] = pk
             doc['epoch'] = str(time.time())
             doc['client'] = 'python'
+            print('sending doc: {}'.format(json.dumps(doc)))
             r = requests.post(url, headers=headers, data=json.dumps(doc))
             print(r)
             print(r.text)
