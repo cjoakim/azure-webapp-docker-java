@@ -10,7 +10,7 @@ import requests
 from time import gmtime, strftime
 
 # This is a Python-based HTTP client used to test the Java/SpringBoot app.
-# Chris Joakim, Microsoft, 2018/06/18
+# Chris Joakim, Microsoft, 2018/06/20
 #
 # python http_client.py time
 # python http_client.py env
@@ -22,6 +22,7 @@ from time import gmtime, strftime
 # python http_client.py post_airport 
 # python http_client.py update_airport 
 # python http_client.py query 
+# python http_client.py invoke_http_function <pk-value>
 
 headers = {'Content-Type':'application/json'}
 
@@ -108,6 +109,17 @@ if __name__ == "__main__":
             r = requests.post(url, headers=headers, data=json.dumps(query))
             array = json.loads(r.text)
             print(array)
+
+        elif func == 'invoke_http_function':
+            pk = sys.argv[2]
+            url = os.environ['AZURE_TEST_FUNCTION_URL']
+            doc = dict()
+            doc['pk'] = pk
+            doc['epoch'] = str(time.time())
+            doc['client'] = 'python'
+            r = requests.post(url, headers=headers, data=json.dumps(doc))
+            print(r)
+            print(r.text)
 
         else:
             print("undefined function: {}".format(func))
