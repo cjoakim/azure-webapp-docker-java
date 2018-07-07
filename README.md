@@ -30,7 +30,6 @@ You'll need to provision the following PaaS services:
 - Azure CosmosDB with SQL/DocumentDB API
 - Azure Container Registry (ACR)
 - Azure Container Instance (ACI)
-- Azure Kubernetes Service (AKS)
 
 ## Workstation Setup
 
@@ -70,6 +69,13 @@ The collection should have a partition key named **/pk**, and an initial RU valu
 $ ./load_airports.sh
 
 $ cat tmp/load_airports.txt | grep loaded
+```
+
+SQL Queries:
+```
+SELECT * FROM c where c.city = "Paris"
+
+SELECT * FROM c WHERE ST_DISTANCE(c.location, {'type': 'Point', 'coordinates': [-122.401440, 37.782251] }) < 1000
 ```
 
 ### Execute the Web App on your Workstation

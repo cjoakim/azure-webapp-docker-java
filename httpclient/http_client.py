@@ -10,7 +10,7 @@ import requests
 from time import gmtime, strftime
 
 # This is a Python-based HTTP client used to test the Java/SpringBoot app.
-# Chris Joakim, Microsoft, 2018/06/20
+# Chris Joakim, Microsoft, 2018/07/08
 #
 # python http_client.py time
 # python http_client.py env
@@ -19,6 +19,7 @@ from time import gmtime, strftime
 # python http_client.py get_id eddd56b5-3b4c-4b50-9d56-b53b4c7b50c6 
 # python http_client.py delete_id test eddd56b5-3b4c-4b50-9d56-b53b4c7b50c6
 # python http_client.py delete_id test 2dcf43ae-94c4-42f8-8f43-ae94c482f88c
+# python http_client.py pk CLT
 # python http_client.py post_airport 
 # python http_client.py update_airport 
 # python http_client.py query 
@@ -27,10 +28,15 @@ from time import gmtime, strftime
 headers = {'Content-Type':'application/json'}
 
 def base_url():
-    return 'http://localhost:8080/'
+    return os.environ['AZURE_WEBAPP_URL']
+    # https://cjoakim-webapp-docker-java.azurewebsites.net/
+    # return 'http://localhost:8080/'
 
 def airports_url():
     return '{}cosmosdb/airports/'.format(base_url())
+
+def pk_url():
+    return '{}cosmosdb/airports/pk/'.format(base_url())
 
 def new_airport():
     airport = dict()
@@ -63,6 +69,14 @@ if __name__ == "__main__":
         elif func == 'get_id':
             id = sys.argv[2]
             url = "{}{}".format(airports_url(), id)
+            print(url)
+            r = requests.get(url, headers=headers)
+            print(r)
+            print(r.text)
+
+        elif func == 'pk':
+            pk = sys.argv[2].upper()
+            url = "{}{}".format(pk_url(), pk)
             print(url)
             r = requests.get(url, headers=headers)
             print(r)
